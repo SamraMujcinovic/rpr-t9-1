@@ -13,7 +13,7 @@ import static javafx.scene.control.PopupControl.USE_COMPUTED_SIZE;
 
 public class Main extends Application {
     private static GeografijaDAO baza;
-
+//
     @Override
     public void start(Stage primaryStage) throws Exception {
         baza = GeografijaDAO.getInstance();
