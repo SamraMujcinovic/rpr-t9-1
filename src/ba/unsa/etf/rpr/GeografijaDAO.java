@@ -1,21 +1,16 @@
 package ba.unsa.etf.rpr;
 
-public class GeografijaDAO {
-    import java.sql.*;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 
-    public class GeografijaDAO {
+public class GeografijaDAO {
         private static GeografijaDAO instance;
         private static Connection connection;
 
+
         public static void removeInstance() {
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            instance = null;
+            instance=null;
         }
 
         private static PreparedStatement ubaci_drzavu = null;
@@ -42,7 +37,7 @@ import java.util.Comparator;
                     statement1.execute("CREATE TABLE grad(id integer primary key, naziv varchar(255), broj_stanovnika INTEGER,drzava integer) ");
                     statement1.closeOnCompletion();
                 } catch (Exception e) {
-                    System.out.println(e.getMessage());
+                    System.out.println("Greska " + e.getMessage());
                     statement = connection.prepareStatement("delete from drzava");
                     statement.execute();
                     statement = connection.prepareStatement("delete from grad");
@@ -181,7 +176,7 @@ import java.util.Comparator;
                 }
                 Grad glavniGrad = new Grad();
                 do {
-                    glavniGrad.setNaziv(res.getString(2));
+                    glavniGrad.setNazivGrada(res.getString(2));
                     glavniGrad.setDrzava(drzava1);
                     glavniGrad.setBrojStanovnika(res.getInt(3));
                     drzava1.setGlavniGrad(glavniGrad);
@@ -241,7 +236,7 @@ import java.util.Comparator;
                 getGrad.setInt(1, id);
                 ResultSet res = getGrad.executeQuery();
                 while (res.next()) {
-                    glavniGrad.setNaziv(res.getString(2));
+                    glavniGrad.setNazivGrada(res.getString(2));
                     glavniGrad.setBrojStanovnika(res.getInt(3));
                     glavniGrad.setDrzava(drzava1);
                     res.close();
@@ -270,7 +265,7 @@ import java.util.Comparator;
                 stm.setInt(1, id);
                 ResultSet res = stm.executeQuery();
                 while (res.next()) {
-                    if (res.getString(2).equals(grad.getNaziv())) return;
+                    if (res.getString(2).equals(grad.getNazivGrada())) return;
                 }
                 stm = connection.prepareStatement("SELECT count(*)FROM grad");
                 int k = 0;
@@ -284,7 +279,7 @@ import java.util.Comparator;
                 stm.setInt(1, k + 3);
                 stm.setInt(3, grad.getBrojStanovnika());
                 stm.setInt(4, id);
-                stm.setString(2, grad.getNaziv());
+                stm.setString(2, grad.getNazivGrada());
                 stm.execute();
 
             } catch (SQLException e) {
@@ -332,7 +327,7 @@ import java.util.Comparator;
                 statement = connection.prepareStatement("update grad set naziv=? where id =?");
                 while (set.next()) {
                     statement.setInt(2, id);
-                    statement.setString(1, grad.getNaziv());
+                    statement.setString(1, grad.getNazivGrada());
                     set.close();
                     break;
                 }
